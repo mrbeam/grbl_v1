@@ -254,6 +254,7 @@
   #define DEFAULT_DECIMAL_PLACES 3
   #define DEFAULT_REPORT_INCHES 0 // false
   #define DEFAULT_AUTO_START 1 // true
+  #define DEFAULT_INVERT_ST_ENABLE 0 // false
   #define DEFAULT_INVERT_LIMIT_PINS 0 // false
   #define DEFAULT_SOFT_LIMIT_ENABLE 1 // false
   #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
