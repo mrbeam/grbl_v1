@@ -1,3 +1,9 @@
+#Grbl - Mr Beam Edition
+
+Mr Beam uses grbl for stepper motor and laser control for its portable and affordable laser cutter and engraver kits. It runs on an Arduino Uno and requires a Mr Beam Shield [Mr Beam Shield](http://shop.mr-beam.org/product/mr-beam-shield) for driving motors and the laser.
+
+This is a modified version of the grbl v0.9. The original grbl description follows.
+
 #Grbl - An embedded g-code interpreter and motion-controller for the Arduino/AVR328 microcontroller
 ------------
 
