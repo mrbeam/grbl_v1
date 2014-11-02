@@ -37,4 +37,7 @@ void spindle_run(uint8_t direction, float rpm);
 // Kills spindle.
 void spindle_stop();
 
+void spindle_pause();
+void spindle_unpause();
+
 #endif

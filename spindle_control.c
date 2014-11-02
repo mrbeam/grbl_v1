@@ -45,6 +45,13 @@ void spindle_init()
   spindle_stop();
 }
 
+void spindle_pause(){
+	TCCRA_REGISTER &= ~(1<<COMB_BIT); // Disable PWM. Output voltage is zero.
+	SPINDLE_ENABLE_PORT &= ~(1<<SPINDLE_ENABLE_BIT);
+}
+void spindle_unpause(){
+	TCCRA_REGISTER |= (1<<COMB_BIT); // Enable PWM. 
+}
 
 void spindle_stop()
 {
