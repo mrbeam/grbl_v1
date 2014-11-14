@@ -47,16 +47,21 @@ void spindle_init()
 
 void spindle_pause(){
 	TCCRA_REGISTER &= ~(1<<COMB_BIT); // Disable PWM. Output voltage is zero.
-	SPINDLE_ENABLE_PORT &= ~(1<<SPINDLE_ENABLE_BIT);
+	#ifndef CPU_MAP_ATMEGA328P 
+	  SPINDLE_ENABLE_PORT &= ~(1<<SPINDLE_ENABLE_BIT);
+    #endif
 }
 void spindle_unpause(){
-	TCCRA_REGISTER |= (1<<COMB_BIT); // Enable PWM. 
+	if(OCR_REGISTER>0){ //only if it was enabled before.
+		TCCRA_REGISTER |= (1<<COMB_BIT); // Enable PWM. 
+    }
 }
 
 void spindle_stop()
 {
   // On the Uno, spindle enable and PWM are shared. Other CPUs have seperate enable pin.
   #ifdef VARIABLE_SPINDLE
+	OCR_REGISTER = 0;
     TCCRA_REGISTER &= ~(1<<COMB_BIT); // Disable PWM. Output voltage is zero.
     #ifndef CPU_MAP_ATMEGA328P 
       SPINDLE_ENABLE_PORT &= ~(1<<SPINDLE_ENABLE_BIT); // Set pin to low.

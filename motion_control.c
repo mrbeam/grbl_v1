@@ -241,6 +241,7 @@ void mc_dwell(float seconds)
 void mc_homing_cycle()
 {
   sys.state = STATE_HOMING; // Set system state variable
+  spindle_stop();
   limits_disable(); // Disable hard limits pin change register for cycle duration
     
   // -------------------------------------------------------------------------------------
