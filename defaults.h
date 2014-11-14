@@ -244,17 +244,17 @@
   #define DEFAULT_Z_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
 
 #ifdef MRBEAM_JUNIOR
-  #define DEFAULT_X_MAX_TRAVEL 216.0 // mm , Junior 216, Senior 432
-  #define DEFAULT_Y_MAX_TRAVEL 297.0 // mm , Junior 297, Senior 594
+  #define DEFAULT_X_MAX_TRAVEL 219.0 // mm , Junior 216+3, Senior 432+3
+  #define DEFAULT_Y_MAX_TRAVEL 300.0 // mm , Junior 297+3, Senior 594+3
 #else
-  #define DEFAULT_X_MAX_TRAVEL 432.0 // mm , Junior 216, Senior 432
-  #define DEFAULT_Y_MAX_TRAVEL 594.0 // mm , Junior 297, Senior 594
+  #define DEFAULT_X_MAX_TRAVEL 435.0 // mm , Junior 216, Senior 432
+  #define DEFAULT_Y_MAX_TRAVEL 597.0 // mm , Junior 297, Senior 594
 #endif
 
   #define DEFAULT_Z_MAX_TRAVEL 10.0 // mm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
   #define DEFAULT_STEPPING_INVERT_MASK 0 //((1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT))
-  #define DEFAULT_DIRECTION_INVERT_MASK 0//((1<<X_AXIS))
+  #define DEFAULT_DIRECTION_INVERT_MASK ((1<<X_AXIS))
   #define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
   #define DEFAULT_STATUS_REPORT_MASK ((BITFLAG_RT_STATUS_MACHINE_POSITION)|(BITFLAG_RT_STATUS_WORK_POSITION))
   #define DEFAULT_JUNCTION_DEVIATION 0.02 // mm
