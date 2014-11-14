@@ -416,6 +416,17 @@ void report_realtime_status()
     printPgmString(PSTR(",RX:"));
     print_uint8_base10(serial_get_rx_buffer_count());
   }
+  // Report laser status
+  if (true) {
+	  
+    printPgmString(PSTR(",laser "));
+    if(TCCRA_REGISTER & (1<<COMB_BIT)){
+		printPgmString(PSTR("on:"));
+    } else {
+		printPgmString(PSTR("off:"));
+	}
+    print_uint8_base10(OCR_REGISTER);
+  }
     
   #ifdef USE_LINE_NUMBERS
     // Report current line number
