@@ -191,7 +191,9 @@ void protocol_execute_runtime()
     // loop until system reset/abort.
     if (rt_exec & (EXEC_ALARM | EXEC_CRIT_EVENT)) {      
       sys.state = STATE_ALARM; // Set system alarm state
+#ifdef LASER_SPINDLE // laser off when machine on hold
 	  spindle_pause();
+#endif
 	  
       // Critical events. Hard/soft limit events identified by both critical event and alarm exec
       // flags. Probe fail is identified by the critical event exec flag only.
@@ -220,7 +222,9 @@ void protocol_execute_runtime()
   
     // Execute system abort. 
     if (rt_exec & EXEC_RESET) {
+#ifdef LASER_SPINDLE // laser off when machine on hold
 	  spindle_pause();
+#endif
       sys.abort = true;  // Only place this is set true.
       return; // Nothing else to do but exit.
     }
@@ -248,8 +252,10 @@ void protocol_execute_runtime()
     if (rt_exec & EXEC_CYCLE_START) { 
       if (sys.state == STATE_QUEUED) {
         sys.state = STATE_CYCLE;
+#ifdef LASER_SPINDLE // laser off when machine on hold
 		spindle_unpause();
-			  
+#endif
+		
         st_prep_buffer(); // Initialize step segment buffer before beginning cycle.
         st_wake_up();
         if (bit_istrue(settings.flags,BITFLAG_AUTO_START)) {
@@ -268,7 +274,9 @@ void protocol_execute_runtime()
     // NOTE: EXEC_CYCLE_STOP is set by the stepper subsystem when a cycle or feed hold completes.
     if (rt_exec & EXEC_CYCLE_STOP) {
       if ( plan_get_current_block() ) {
+#ifdef LASER_SPINDLE // laser off when machine on hold		  
 		  spindle_pause();
+#endif		  
 		  sys.state = STATE_QUEUED; 
 	  }
       else { sys.state = STATE_IDLE; }
