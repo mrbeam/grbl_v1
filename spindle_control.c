@@ -117,8 +117,8 @@ void spindle_run(uint8_t direction, float rpm, uint8_t motion)
       SPINDLE_DIRECTION_PORT |= (1<<SPINDLE_DIRECTION_BIT);
     }
     #ifdef VARIABLE_SPINDLE
-       spindle_start();
        spindle_rpm_update(calculate_pwm_from_rpm(rpm));      // TODO: Install the optional capability for frequency-based output for servos.
+       spindle_start();
       #ifndef CPU_MAP_ATMEGA328P // On the Uno, spindle enable and PWM are shared.
         SPINDLE_ENABLE_PORT |= (1<<SPINDLE_ENABLE_BIT);
       #endif
