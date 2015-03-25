@@ -28,7 +28,7 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
-GIT_HASH := $(shell git describe --abbrev=4 --dirty --always --tags)
+GIT_HASH := $(shell git describe --abbrev=7 --dirty --always --tags)
 DEVICE     ?= atmega328p
 CLOCK      = 16000000
 PROGRAMMER ?= -c avrisp2 -P usb
