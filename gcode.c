@@ -48,7 +48,7 @@
 parser_state_t gc_state;
 parser_block_t gc_block;
 
-#define FAIL(status) return(status);
+#define FAIL(status) spindle_stop(); return(status);
 
 
 void gc_init() 
