@@ -89,6 +89,7 @@ void settings_reset() {
   if (DEFAULT_SOFT_LIMIT_ENABLE) { settings.flags |= BITFLAG_SOFT_LIMIT_ENABLE; }
   if (DEFAULT_HARD_LIMIT_ENABLE) { settings.flags |= BITFLAG_HARD_LIMIT_ENABLE; }
   if (DEFAULT_HOMING_ENABLE) { settings.flags |= BITFLAG_HOMING_ENABLE; }
+  if (DEFAULT_LASER) { settings.flags |= BITFLAG_LASER; }
   
   settings.steps_per_mm[X_AXIS] = DEFAULT_X_STEPS_PER_MM;
   settings.steps_per_mm[Y_AXIS] = DEFAULT_Y_STEPS_PER_MM;
@@ -251,6 +252,12 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
       case 25: settings.homing_seek_rate = value; break;
       case 26: settings.homing_debounce_delay = int_value; break;
       case 27: settings.homing_pulloff = value; break;
+  #ifdef LASER_SPINDLE
+      case 40: 
+        if (int_value) { settings.flags |= BITFLAG_LASER; }
+        else { settings.flags &= ~BITFLAG_LASER; }
+        break;
+  #endif	  
       default: 
         return(STATUS_INVALID_STATEMENT);
     }

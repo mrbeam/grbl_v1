@@ -37,6 +37,7 @@
 
 // Default settings. Used when resetting EEPROM. Change to desired name in defaults.h
 #define DEFAULTS_MRBEAM
+//#define DEFAULTS_MRBEAM_JUNIOR
 
 // Serial baud rate
 #define BAUD_RATE 115200
@@ -161,6 +162,11 @@
 // "S1000" @ 5V, "S250" @ 0.02V, and "S625" @ 2.5V (mid-range). The pin outputs 0V when disabled.
 #define SPINDLE_MAX_RPM 1000.0 // Max spindle RPM. This value is equal to 100% duty cycle on the PWM.
 #define SPINDLE_MIN_RPM 0.0    // Min spindle RPM. This value is equal to (1/256) duty cycle on the PWM.
+
+// This need variable spinle enabaled. Lasers don't need time to speed up or slow down and the build 
+// in dwelling for spindels will be disabled. 
+#define LASER_SPINDLE // Default disabled. Uncomment to enable.
+
 
 // Minimum planner junction speed. Sets the default minimum junction speed the planner plans to at
 // every buffer block junction, except for starting from rest and end of the buffer, which are always

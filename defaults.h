@@ -61,6 +61,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 500.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm
+  #define DEFAULT_LASER 0 // false
 #endif
 
 #ifdef DEFAULTS_SHERLINE_5400
@@ -101,6 +102,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 635.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm
+  #define DEFAULT_LASER 0 // false
 #endif
 
 #ifdef DEFAULTS_SHAPEOKO
@@ -144,6 +146,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 250.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm  
+  #define DEFAULT_LASER 0 // false
 #endif
 
 #ifdef DEFAULTS_SHAPEOKO_2
@@ -187,6 +190,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 250.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm  
+  #define DEFAULT_LASER 0 // false
 #endif
 
 #ifdef DEFAULTS_ZEN_TOOLWORKS_7x7
@@ -228,6 +232,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 250.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm
+  #define DEFAULT_LASER 0 // false
 #endif
 
 #ifdef DEFAULTS_MRBEAM
@@ -239,8 +244,8 @@
   #define DEFAULT_X_MAX_RATE 5000.0 // mm/min
   #define DEFAULT_Y_MAX_RATE 5000.0 // mm/min
   #define DEFAULT_Z_MAX_RATE 5000.0 // mm/min
-  #define DEFAULT_X_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_Y_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_X_ACCELERATION (700.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_Y_ACCELERATION (700.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Z_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
 
 #ifdef MRBEAM_JUNIOR
@@ -264,7 +269,7 @@
   #define DEFAULT_AUTO_START 1 // true
   #define DEFAULT_INVERT_ST_ENABLE 0 // false
   #define DEFAULT_INVERT_LIMIT_PINS 0 // false
-  #define DEFAULT_SOFT_LIMIT_ENABLE 1 // false
+  #define DEFAULT_SOFT_LIMIT_ENABLE 1 // true
   #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
   #define DEFAULT_HOMING_ENABLE 1  // false
   #define DEFAULT_HOMING_DIR_MASK ((1<<X_AXIS)|(1<<Y_AXIS)) // move negative dir
@@ -272,6 +277,7 @@
   #define DEFAULT_HOMING_SEEK_RATE 2000.0 // mm/min
   #define DEFAULT_HOMING_DEBOUNCE_DELAY 100 // msec (0-65k)
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm
+  #define DEFAULT_LASER 1 // true
 
 #endif
 
