@@ -37,7 +37,6 @@
 
 // Default settings. Used when resetting EEPROM. Change to desired name in defaults.h
 #define DEFAULTS_MRBEAM
-//#define DEFAULTS_MRBEAM_JUNIOR
 
 // Serial baud rate
 #define BAUD_RATE 115200

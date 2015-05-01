@@ -43,7 +43,8 @@ FUSES      = -U hfuse:w:0xd2:m -U lfuse:w:0xff:m
 # Tune the lines below only if you know what you are doing:
 
 AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE) -B 10 -F
-COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -DGIT_VERSION=\"$(GIT_HASH)\" -mmcu=$(DEVICE) -I. -ffunction-sections
+override CFLAGS += -DGIT_VERSION=\"$(GIT_HASH)\"
+COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) $(CFLAGS) -mmcu=$(DEVICE) -I. -ffunction-sections
 
 # symbolic targets:
 all:	grbl.hex

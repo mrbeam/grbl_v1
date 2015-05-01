@@ -237,7 +237,6 @@
 
 #ifdef DEFAULTS_MRBEAM
   // Mr Beam default settings. Needs to be adjusted to fit Junior / Senior.
-  #define MRBEAM_JUNIOR
   #define DEFAULT_X_STEPS_PER_MM 100.0
   #define DEFAULT_Y_STEPS_PER_MM 100.0
   #define DEFAULT_Z_STEPS_PER_MM 100.0
