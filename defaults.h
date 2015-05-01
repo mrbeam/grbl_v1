@@ -249,11 +249,11 @@
   #define DEFAULT_Z_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
 
 #ifdef MRBEAM_JUNIOR
-  #define DEFAULT_X_MAX_TRAVEL 219.0 // mm , Junior 216+3, Senior 432+3
-  #define DEFAULT_Y_MAX_TRAVEL 300.0 // mm , Junior 297+3, Senior 594+3
+  #define DEFAULT_X_MAX_TRAVEL 219.0 // mm , Junior 216+3
+  #define DEFAULT_Y_MAX_TRAVEL 300.0 // mm , Junior 297+3 
 #else
-  #define DEFAULT_X_MAX_TRAVEL 435.0 // mm , Junior 216, Senior 432
-  #define DEFAULT_Y_MAX_TRAVEL 597.0 // mm , Junior 297, Senior 594
+  #define DEFAULT_X_MAX_TRAVEL 435.0 // mm , Senior 432+3
+  #define DEFAULT_Y_MAX_TRAVEL 597.0 // mm , Senior 594+3
 #endif
 
   #define DEFAULT_Z_MAX_TRAVEL 10.0 // mm
