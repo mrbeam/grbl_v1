@@ -2,3 +2,5 @@
 *.elf
 *.DS_Store
 *.d
+.idea
+*.iml
