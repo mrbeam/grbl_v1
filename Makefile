@@ -74,15 +74,14 @@ load: all
 	bootloadHID grbl.hex
 
 clean:
-	rm -f grbl.hex main.elf $(OBJECTS) $(OBJECTS:.o=.d)
+	rm -f grbl_*.hex main.elf $(OBJECTS) $(OBJECTS:.o=.d)
 
 # file targets:
 main.elf: $(OBJECTS)
 	$(COMPILE) -o main.elf $(OBJECTS) -lm -Wl,--gc-sections
 
 grbl.hex: main.elf
-	rm -f grbl.hex
-	avr-objcopy -j .text -j .data -O ihex main.elf grbl.hex
+	avr-objcopy -j .text -j .data -O ihex main.elf grbl_$(GIT_HASH).hex
 	avr-size --format=berkeley main.elf
 
 # If you have an EEPROM section, you must also create a hex file for the
