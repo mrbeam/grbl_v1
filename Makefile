@@ -36,6 +36,7 @@ OBJECTS    = main.o motion_control.o gcode.o spindle_control.o coolant_control.o
              protocol.o stepper.o eeprom.o settings.o planner.o nuts_bolts.o limits.o \
              print.o probe.o report.o system.o
 FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfd:m -U lock:w:0xff:m
+HEX_FILE   = grbl_$(GIT_HASH).hex
 
 # Tune the lines below only if you know what you are doing:
 
@@ -44,7 +45,7 @@ override CFLAGS += -DGIT_VERSION=\"$(GIT_HASH)\"
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) $(CFLAGS) -mmcu=$(DEVICE) -I. -ffunction-sections
 
 # symbolic targets:
-all:	grbl.hex
+all:	$(HEX_FILE)
 
 .c.o:
 	$(COMPILE) -c $< -o $@
@@ -61,7 +62,7 @@ all:	grbl.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:grbl.hex:i
+	$(AVRDUDE) -U flash:w:$(HEX_FILE):i
 
 fuse:
 	$(AVRDUDE) $(FUSES)
@@ -71,7 +72,7 @@ install: flash fuse
 
 # if you use a bootloader, change the command below appropriately:
 load: all
-	bootloadHID grbl.hex
+	bootloadHID $(HEX_FILE)
 
 clean:
 	rm -f grbl_*.hex main.elf $(OBJECTS) $(OBJECTS:.o=.d)
@@ -80,8 +81,8 @@ clean:
 main.elf: $(OBJECTS)
 	$(COMPILE) -o main.elf $(OBJECTS) -lm -Wl,--gc-sections
 
-grbl.hex: main.elf
-	avr-objcopy -j .text -j .data -O ihex main.elf grbl_$(GIT_HASH).hex
+$(HEX_FILE): main.elf
+	avr-objcopy -j .text -j .data -O ihex main.elf $(HEX_FILE)
 	avr-size --format=berkeley main.elf
 
 # If you have an EEPROM section, you must also create a hex file for the
