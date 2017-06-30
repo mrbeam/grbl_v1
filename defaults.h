@@ -300,7 +300,7 @@
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
   #define DEFAULT_STEPPING_INVERT_MASK 0 //((1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT))
   #define DEFAULT_DIRECTION_INVERT_MASK ((1<<Y_AXIS))
-  #define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
+  #define DEFAULT_STEPPER_IDLE_LOCK_TIME 255 // msec (0-254, 255 keeps steppers enabled)
   #define DEFAULT_STATUS_REPORT_MASK ((BITFLAG_RT_STATUS_MACHINE_POSITION)| \
                                       (BITFLAG_RT_STATUS_WORK_POSITION)| \
                                       (BITFLAG_RT_STATUS_PLANNER_BUFFER)| \
