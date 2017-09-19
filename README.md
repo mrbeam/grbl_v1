@@ -1,4 +1,4 @@
-#Grbl - Mr Beam Edition #
+# Grbl - Mr Beam Edition #
 
 Mr Beam uses grbl for stepper motor and laser control for its portable and affordable laser cutter and engraver kits. It runs on an Arduino Uno and requires a Mr Beam Shield [Mr Beam Shield](http://shop.mr-beam.org/product/mr-beam-shield) for driving motors and the laser.
 
@@ -6,12 +6,12 @@ This is a modified version of the grbl v0.9. The original grbl description follo
 
 
 
-## How to flash Grbl on mr Beam II ##
+## How to flash Grbl on Mr Beam II ##
 
-###READ hex file: ###
+### READ hex file: ###
 `avrdude -c avrispmkII -p atmega328p -U flash:r:filename.hex:i`
 
-###WRITE hex file: ###
+### WRITE hex file: ###
 `avrdude -c avrispmkII -p atmega328p -D -U flash:w:filename.hex`
 
 -D Disable auto erase for flash
