@@ -12,8 +12,15 @@ This is a modified version of the grbl v0.9. The original grbl description follo
 `avrdude -c avrispmkII -p atmega328p -U flash:r:filename.hex:i`
 
 ### WRITE hex file: ###
-`avrdude -c avrispmkII -p atmega328p -D -U flash:w:filename.hex`
+`avrdude -c avrispmkII -p atmega328p -U flash:w:filename.hex`
 
--D Disable auto erase for flash
+-D Disable auto erase for flash (not recommended)
+
+#### Write from Raspberry Pi: #### 
+`avrdude -c arduino -p atmega328p -U flash:w:grbl_with_optiboot.hex`
+
+Existing Grbl must include bootloaded for this to work.
+
+Flo says: this works only with his patched version of `avrdude`. And it’s also a bit flaky.
 
 More about flashing: https://docs.google.com/document/d/1KYD-67uyJthAYrTPURkSN8l7AVauc4Yw4M08CVyAFd0/edit#
