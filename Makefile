@@ -36,7 +36,9 @@ OBJECTS    = main.o motion_control.o gcode.o spindle_control.o coolant_control.o
              protocol.o stepper.o eeprom.o settings.o planner.o nuts_bolts.o limits.o \
              print.o probe.o report.o system.o
 FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfd:m -U lock:w:0xff:m
-HEX_FILE   = grbl_$(GIT_HASH).hex
+GRBL_HEX_FILE  = hex/grbl_$(GIT_HASH).hex
+OPTI_HEX_FILE  = hex/optiboot_atmega328.hex
+GRBL_OPTI_FILE = hex/grbl_optiboot_$(GIT_HASH).dex
 
 # Tune the lines below only if you know what you are doing:
 
@@ -45,7 +47,7 @@ override CFLAGS += -DGIT_VERSION=\"$(GIT_HASH)\"
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) $(CFLAGS) -mmcu=$(DEVICE) -I. -ffunction-sections
 
 # symbolic targets:
-all:	$(HEX_FILE)
+all:	$(GRBL_HEX_FILE) $(GRBL_OPTI_FILE)
 
 .c.o:
 	$(COMPILE) -c $< -o $@
@@ -62,7 +64,7 @@ all:	$(HEX_FILE)
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:$(HEX_FILE):i
+	$(AVRDUDE) -U flash:w:$(GRBL_OPTI_FILE):i
 
 fuse:
 	$(AVRDUDE) $(FUSES)
@@ -72,7 +74,7 @@ install: flash fuse
 
 # if you use a bootloader, change the command below appropriately:
 load: all
-	bootloadHID $(HEX_FILE)
+	bootloadHID $(GRBL_HEX_FILE)
 
 clean:
 	rm -f grbl_*.hex main.elf $(OBJECTS) $(OBJECTS:.o=.d)
@@ -81,9 +83,13 @@ clean:
 main.elf: $(OBJECTS)
 	$(COMPILE) -o main.elf $(OBJECTS) -lm -Wl,--gc-sections
 
-$(HEX_FILE): main.elf
-	avr-objcopy -j .text -j .data -O ihex main.elf $(HEX_FILE)
+$(GRBL_HEX_FILE): main.elf
+	avr-objcopy -j .text -j .data -O ihex main.elf $(GRBL_HEX_FILE)
 	avr-size --format=berkeley main.elf
+
+$(GRBL_OPTI_FILE): $(GRBL_HEX_FILE)
+	head -n -1 $(GRBL_HEX_FILE) > $(GRBL_OPTI_FILE)
+	cat $(OPTI_HEX_FILE) >> $(GRBL_OPTI_FILE)
 
 # If you have an EEPROM section, you must also create a hex file for the
 # EEPROM and add it to the "flash" target.
