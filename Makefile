@@ -38,7 +38,7 @@ OBJECTS    = main.o motion_control.o gcode.o spindle_control.o coolant_control.o
 FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfd:m -U lock:w:0xff:m
 GRBL_HEX_FILE  = hex/grbl_$(GIT_HASH).hex
 OPTI_HEX_FILE  = hex/optiboot_atmega328.hex
-GRBL_OPTI_FILE = hex/grbl_optiboot_$(GIT_HASH).dex
+GRBL_OPTI_FILE = hex/grbl_optiboot_$(GIT_HASH).hex
 
 # Tune the lines below only if you know what you are doing:
 
