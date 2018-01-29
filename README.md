@@ -8,6 +8,8 @@ This is a modified version of the grbl v0.9. The original grbl description follo
 
 ## How to flash Grbl on Mr Beam II ##
 
+    > ./flash_grbl.sh grbl_optiboot_22270fa.hex
+
 ### READ hex file: ###
 `avrdude -c avrispmkII -p atmega328p -U flash:r:<filename.hex>:i`
 
@@ -15,6 +17,14 @@ This is a modified version of the grbl v0.9. The original grbl description follo
 `avrdude -c avrispmkII -p atmega328p -U flash:w:grbl_optiboot_22270fa.hex -U efuse:w:0xff:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U lock:w:0xff:m`
 
 -D Disable auto erase for flash (not recommended)
+
+
+#### Fuse Values: ###
+    EFUSE: 0xFC
+    HFUSE: 0xDE 
+    LFUSE: 0xFF 
+    LOCK:  0xCF 
+
 
 #### Write from Raspberry Pi: #### 
 `avrdude -c arduino -p atmega328p -U flash:w:grbl_with_optiboot.hex`
