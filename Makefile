@@ -28,6 +28,14 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
+#  !!  Mr Beam:  !!
+# You need avr-gcc to build grbl
+# For Mac: 
+#   $ brew tap osx-cross/avr
+#   $ brew install avr-gcc
+# for linux:
+#   ?
+
 GIT_HASH := $(shell git describe --abbrev=7 --dirty --always --tags)
 DEVICE     ?= atmega328p
 CLOCK      = 16000000
@@ -39,6 +47,9 @@ FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfd:m -U lock:w:0xf
 GRBL_HEX_FILE  = hex/grbl_$(GIT_HASH).hex
 OPTI_HEX_FILE  = hex/optiboot_atmega328.hex
 GRBL_OPTI_FILE = hex/grbl_optiboot_$(GIT_HASH).hex
+
+# Mac support: use ghead on mac, head on linux
+HEAD_CMD:=$(shell type -p ghead || echo head)
 
 # Tune the lines below only if you know what you are doing:
 
@@ -88,7 +99,7 @@ $(GRBL_HEX_FILE): main.elf
 	avr-size --format=berkeley main.elf
 
 $(GRBL_OPTI_FILE): $(GRBL_HEX_FILE)
-	head -n -1 $(GRBL_HEX_FILE) > $(GRBL_OPTI_FILE)
+	$(HEAD_CMD) -n -1 $(GRBL_HEX_FILE) > $(GRBL_OPTI_FILE)
 	cat $(OPTI_HEX_FILE) >> $(GRBL_OPTI_FILE)
 
 # If you have an EEPROM section, you must also create a hex file for the

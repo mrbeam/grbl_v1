@@ -19,4 +19,4 @@ echo ""
 read -p ""
 
 
-avrdude -c avrispmkII -p atmega328p -U "flash:w:$1" -U efuse:w:0xfc:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U lock:w:0xcf:m
+avrdude -c avrispmkII -p atmega328p -U "flash:w:$1:i" -U efuse:w:0xfc:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U lock:w:0xcf:m
