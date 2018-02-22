@@ -37,24 +37,24 @@
 #   ?
 
 GIT_HASH := $(shell git describe --abbrev=7 --dirty --always --tags)
+DATE_STR := $(shell date +'%Y%m%d')
 DEVICE     ?= atmega328p
 CLOCK      = 16000000
 PROGRAMMER ?= -c avrisp2 -P usb
 OBJECTS    = main.o motion_control.o gcode.o spindle_control.o coolant_control.o serial.o \
              protocol.o stepper.o eeprom.o settings.o planner.o nuts_bolts.o limits.o \
              print.o probe.o report.o system.o
-FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfd:m -U lock:w:0xff:m
-GRBL_HEX_FILE  = hex/grbl_$(GIT_HASH).hex
+FUSES      = -U hfuse:w:0xde:m -U lfuse:w:0xff:m -U efuse:w:0xfc:m -U lock:w:0xcf:m
 OPTI_HEX_FILE  = hex/optiboot_atmega328.hex
-GRBL_OPTI_FILE = hex/grbl_optiboot_$(GIT_HASH).hex
+GRBL_HEX_FILE  = hex/grbl_0.9g_$(DATE_STR)_$(GIT_HASH).hex
+GRBL_OPTI_FILE = hex/grbl_0.9g_$(DATE_STR)_$(GIT_HASH)_optiboot.hex
 
 # Mac support: use ghead on mac, head on linux
 HEAD_CMD:=$(shell type -p ghead || echo head)
 
 # Tune the lines below only if you know what you are doing:
-
 AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE) -B 10 -F
-override CFLAGS += -DGIT_VERSION=\"$(GIT_HASH)\"
+override CFLAGS += -DGIT_VERSION=\"$(DATE_STR)_$(GIT_HASH)\"
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) $(CFLAGS) -mmcu=$(DEVICE) -I. -ffunction-sections
 
 # symbolic targets:
