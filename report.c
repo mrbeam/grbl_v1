@@ -412,10 +412,6 @@ void report_realtime_status()
       if (i < (N_AXIS-1)) { printPgmString(PSTR(",")); }
     }
   }
-  if (true) {
-    printPgmString(PSTR(",S:")); 
-    print_uint8_base10(OCR_REGISTER);
-  }
         
   // Returns the number of active blocks are in the planner buffer.
   if (bit_istrue(settings.status_report_mask,BITFLAG_RT_STATUS_PLANNER_BUFFER)) {
@@ -428,6 +424,25 @@ void report_realtime_status()
     printPgmString(PSTR(",RX:"));
     print_uint8_base10(serial_get_rx_buffer_count());
   }
+
+  if (bit_istrue(settings.status_report_mask,BITFLAG_RT_STATUS_LIMIT_PINS)) {
+    printPgmString(PSTR(",limits:"));
+    uint8_t bits = LIMIT_PIN;
+    // Check limit pin state.
+    if (bit_istrue(settings.flags,BITFLAG_INVERT_LIMIT_PINS)) {
+        bits ^= LIMIT_MASK;
+    }
+    if ((bits & (1<<X_LIMIT_BIT)) == 0) {
+        printPgmString(PSTR("x"));
+    }
+    if ((bits & (1<<Y_LIMIT_BIT)) == 0) {
+        printPgmString(PSTR("y"));
+    }
+    if ((bits & (1<<Z_LIMIT_BIT)) == 0) {
+        printPgmString(PSTR("z"));
+    }
+  }
+
   // Report laser status
   if (true) {
 	  

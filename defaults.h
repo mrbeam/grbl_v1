@@ -294,8 +294,8 @@
   #define DEFAULT_X_ACCELERATION (700.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Y_ACCELERATION (700.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Z_ACCELERATION (100.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_X_MAX_TRAVEL 501.0 // mm
-  #define DEFAULT_Y_MAX_TRAVEL 391.0 // mm
+  #define DEFAULT_X_MAX_TRAVEL 515.1 // mm
+  #define DEFAULT_Y_MAX_TRAVEL 391.1 // mm
   #define DEFAULT_Z_MAX_TRAVEL 40.0 // mm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
   #define DEFAULT_STEPPING_INVERT_MASK 0 //((1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT))
