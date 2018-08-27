@@ -283,7 +283,13 @@ void protocol_execute_runtime()
       bit_false_atomic(sys.execute,EXEC_CYCLE_STOP);
     }
 
+	// Critical events. RX Buffer overflow
+    if (rt_exec & EXEC_RX_BUF_OV) {
+      report_alarm_message(ALARM_RX_BUF_OV);
+      bit_false_atomic(sys.execute,EXEC_RX_BUF_OV);
   }
+
+ }
   
   // Overrides flag byte (sys.override) and execution should be installed here, since they 
   // are runtime and require a direct and controlled interface to the main stepper program.
@@ -319,4 +325,9 @@ void protocol_buffer_synchronize()
 // NOTE: This function is called from the main loop and mc_line() only and executes when one of
 // two conditions exist respectively: There are no more blocks sent (i.e. streaming is finished, 
 // single commands), or the planner buffer is full and ready to go.
-void protocol_auto_cycle_start() { if (sys.auto_start) { bit_true_atomic(sys.execute, EXEC_CYCLE_START); } } 
+void protocol_auto_cycle_start() 
+ { 
+  if (sys.auto_start) {bit_true_atomic(sys.execute, EXEC_CYCLE_START);} 
+ } 
+ 
+

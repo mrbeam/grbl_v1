@@ -178,7 +178,7 @@ ISR(SERIAL_RX)
     case CMD_RESET:         mc_reset(); break; // Call motion control reset routine.
     default: // Write character to buffer    
       next_head = serial_rx_buffer_head + 1;
-      if (next_head == RX_BUFFER_SIZE) { next_head = 0; }
+      if (next_head == RX_BUFFER_SIZE) { next_head = 0;}
     
       // Write data to buffer unless it is full.
       if (next_head != serial_rx_buffer_tail) {
@@ -193,7 +193,7 @@ ISR(SERIAL_RX)
         #endif
         
       }
-      //TODO: else alarm on overflow?
+      else {bit_true_atomic(sys.execute,EXEC_RX_BUF_OV);}//TODO: else alarm on overflow?
   }
 }
 

@@ -34,7 +34,7 @@ void spindle_init();
 #ifdef VARIABLE_SPINDLE
   // calaculates the RPM for the spindle, takes the value 
   // from S gcode and calculates the PWM duty cycle
-  uint8_t calculate_pwm_from_rpm(float rpm);
+  uint8_t calculate_pwm_from_rpm(uint16_t rpm);
   // Starts spindle.
   void spindle_start();
   // writes new precalulated value to register

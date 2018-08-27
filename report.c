@@ -49,7 +49,10 @@
 void report_status_message(uint8_t status_code) 
 {
   if (status_code == 0) { // STATUS_OK
-    printPgmString(PSTR("ok\r\n"));
+    uint8_t rx_free = RX_BUFFER_SIZE - serial_get_rx_buffer_count();
+    printPgmString(PSTR("ok:"));
+	  print_uint8_base10(rx_free);
+	  printPgmString(PSTR("\r\n"));
   } else {
     printPgmString(PSTR("error: "));
     switch(status_code) {          
@@ -103,6 +106,8 @@ void report_alarm_message(int8_t alarm_code)
     printPgmString(PSTR("Abort during cycle")); break;
     case ALARM_PROBE_FAIL:
     printPgmString(PSTR("Probe fail")); break;
+	case ALARM_RX_BUF_OV:
+	printPgmString(PSTR("RX Buffer Overrun")); break;
   }
   printPgmString(PSTR("\r\n"));
   delay_ms(500); // Force delay to ensure message clears serial write buffer.
@@ -136,7 +141,7 @@ void report_feedback_message(uint8_t message_code)
 // Welcome message
 void report_init_message()
 {
-  printPgmString(PSTR("\r\nGrbl " GRBL_VERSION "_" GIT_VERSION " ['$' for help]\r\n"));
+  printPgmString(PSTR("\r\nGrbl " GRBL_VERSION "_" GRBL_VERSION_BUILD " ['$' for help]\r\n"));
 }
 
 // Grbl help message

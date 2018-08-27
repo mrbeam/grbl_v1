@@ -52,10 +52,20 @@ void spindle_pause(){
     #endif
 }
 void spindle_unpause(){
-	if(OCR_REGISTER>0){ //only if it was enabled before.
-		TCCRA_REGISTER |= (1<<COMB_BIT); // Enable PWM. 
+  #ifdef LASER_SPINDLE	
+	   if(OCR_REGISTER>0) //only if it was enabled before.  !!!And no white point without Laserpower!!!
+     #endif
+    {
+  TCCRA_REGISTER |= (1<<COMB_BIT); // Enable PWM. 
     }
 }
+/*
+ void spindle_rpm_update(uint8_t pwm)
+  {
+    // TODO: Install the optional capability for frequency-based output for servos.
+    OCR_REGISTER = pwm;                                    
+  }
+*/
 
 void spindle_stop()
 {
@@ -85,13 +95,11 @@ void spindle_stop()
     OCR_REGISTER = pwm;
   }
 
-  uint8_t calculate_pwm_from_rpm(float rpm)
+  uint8_t calculate_pwm_from_rpm(uint16_t rpm)
   {
-     // TODO: Install the optional capability for frequency-based output for servos.
-     #define SPINDLE_RPM_RANGE (SPINDLE_MAX_RPM-SPINDLE_MIN_RPM)
-     rpm -= SPINDLE_MIN_RPM;
-     if ( rpm > SPINDLE_RPM_RANGE ) { rpm = SPINDLE_RPM_RANGE; } // Prevent uint8 overflow
-     return (uint8_t) floor( rpm*(255.0/SPINDLE_RPM_RANGE) + 0.5);
+     rpm += SPINDLE_MIN_RPM;     //set min rpm 
+	 rpm & 0x07F8; //limit to 2040
+     return (rpm>>3);
   }
 #endif
 

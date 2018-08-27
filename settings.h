@@ -27,9 +27,12 @@
 #ifndef settings_h
 #define settings_h
 
-
 #define GRBL_VERSION "0.9g"
-#define GRBL_VERSION_BUILD GIT_VERSION
+
+//For Arduino IDE
+//#define GRBL_VERSION_BUILD "Arduino"
+//for GIT
+#define GRBL_VERSION_BUILD GIT_VERSION  
 
 // Version of the EEPROM data. Will be used to migrate existing data from older versions of Grbl
 // when firmware is upgraded. Always stored in byte 0 of eeprom

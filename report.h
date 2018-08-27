@@ -57,6 +57,7 @@
 #define ALARM_LIMIT_ERROR -1
 #define ALARM_ABORT_CYCLE -2
 #define ALARM_PROBE_FAIL -3
+#define ALARM_RX_BUF_OV -4
 
 // Define Grbl feedback message codes.
 #define MESSAGE_CRITICAL_EVENT 1
