@@ -98,7 +98,7 @@ void spindle_stop()
   uint8_t calculate_pwm_from_rpm(uint16_t rpm)
   {
      rpm += SPINDLE_MIN_RPM;     //set min rpm 
-	 rpm & 0x07F8; //limit to 2040
+	   rpm = rpm & 0x07F8;         //limit to 2040
      return (rpm>>3);
   }
 #endif

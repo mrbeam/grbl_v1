@@ -106,8 +106,8 @@ void report_alarm_message(int8_t alarm_code)
     printPgmString(PSTR("Abort during cycle")); break;
     case ALARM_PROBE_FAIL:
     printPgmString(PSTR("Probe fail")); break;
-	case ALARM_RX_BUF_OV:
-	printPgmString(PSTR("RX Buffer Overrun")); break;
+	  case ALARM_RX_BUF_OV:
+	  printPgmString(PSTR("RX Buffer Overrun")); break;
   }
   printPgmString(PSTR("\r\n"));
   delay_ms(500); // Force delay to ensure message clears serial write buffer.
