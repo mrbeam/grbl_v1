@@ -37,7 +37,7 @@
 
 
 static char line[LINE_BUFFER_SIZE]; // Line to be executed. Zero-terminated.
-
+static char previousLine[LINE_BUFFER_SIZE*2]; // To hold the previous line and later both
 
 // Directs and executes one line of formatted input from protocol_process. While mostly
 // incoming streaming g-code blocks, this also directs and executes Grbl internal commands,
@@ -92,6 +92,8 @@ void protocol_main_loop()
   // ---------------------------------------------------------------------------------  
   
   uint8_t iscomment = false;
+  uint8_t containsG = false;
+  uint8_t writeError = false;
   uint8_t char_counter = 0;
   uint8_t c;
   for (;;) {
@@ -105,13 +107,19 @@ void protocol_main_loop()
     // exceed 256 characters, but the Arduino Uno does not have the memory space for this.
     // With a better processor, it would be very easy to pull this initial parsing out as a 
     // seperate task to be shared by the g-code parser and Grbl's system commands.
-    
     while((c = serial_read()) != SERIAL_NO_DATA) {
       if ((c == '\n') || (c == '\r')) { // End of line reached
         line[char_counter] = 0; // Set string termination character.
         protocol_execute_line(line); // Line is complete. Execute it!
         iscomment = false;
+        containsG = false;
         char_counter = 0;
+
+        // If an error occurred in the previous line, show it
+        if (writeError) {
+          report_corrupted_line(strcat(previousLine, line));
+          writeError = false;
+        }
       } else {
         if (iscomment) {
           // Throw away all comment characters
@@ -147,6 +155,22 @@ void protocol_main_loop()
             report_status_message(STATUS_OVERFLOW);
             iscomment = false;
             char_counter = 0;
+          } else if (c == 'G' || c == 'g') {
+            // G24 avoidance
+            if (containsG){
+              // If there is already a G in the line, simulate end of line and beginning of next
+              strcpy(previousLine, line); // Save current line so it can be shown
+              line[char_counter] = 0; // Set string termination character.
+              protocol_execute_line(line); // Line is complete. Execute it!
+              iscomment = false;
+              writeError = true;
+              char_counter = 0; //Start new line
+            } else {
+              containsG = true;
+            }
+            line[char_counter++] = 'G'; //Add 'G' to line
+
+
           } else if (c >= 'a' && c <= 'z') { // Upcase lowercase
             line[char_counter++] = c-'a'+'A';
           } else {

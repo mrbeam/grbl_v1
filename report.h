@@ -102,4 +102,7 @@ void report_startup_line(uint8_t n, char *line);
 // Prints build info and user info
 void report_build_info(char *line);
 
+// Prints the GCODE line on error
+void report_corrupted_line(char *line);
+
 #endif

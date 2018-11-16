@@ -132,11 +132,17 @@ void report_feedback_message(uint8_t message_code)
     case MESSAGE_ENABLED:
     printPgmString(PSTR("Enabled")); break;
     case MESSAGE_DISABLED:
-    printPgmString(PSTR("Disabled")); break; 
+    printPgmString(PSTR("Disabled")); break;
   }
   printPgmString(PSTR("]\r\n"));
 }
 
+void report_corrupted_line(char *line)
+{
+    printString("G24_AVOIDED: ");
+    printString(line);
+    printString("\n");
+}
 
 // Welcome message
 void report_init_message()
