@@ -36,6 +36,8 @@
 # for linux:
 #   ?
 
+SHELL:=/bin/bash
+
 GIT_HASH := $(shell git describe --abbrev=7 --dirty --always --tags)
 DATE_STR := $(shell date +'%Y%m%d')
 DEVICE     ?= atmega328p
@@ -50,7 +52,7 @@ GRBL_HEX_FILE  = hex/grbl_0.9g_$(DATE_STR)_$(GIT_HASH).hex
 GRBL_OPTI_FILE = hex/grbl_0.9g_$(DATE_STR)_$(GIT_HASH)_optiboot.hex
 
 # Mac support: use ghead on mac, head on linux
-HEAD_CMD:=$(shell type -p ghead || echo head)
+HEAD_CMD := $(shell { type -p ghead || type -p head; } 2>/dev/null)
 
 # Tune the lines below only if you know what you are doing:
 AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE) -B 10 -F

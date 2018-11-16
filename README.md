@@ -5,6 +5,13 @@ Mr Beam uses grbl for stepper motor and laser control for its portable and affor
 This is a modified version of the grbl v0.9. The original grbl description follows.
 
 
+### Prerequisites (Linux)
+```bash
+sudo apt install gcc-avr
+sudo apt-get install avr-libc
+sudo apt-get install avrdude
+```
+
 
 ## How to flash Grbl on Mr Beam II ##
 
