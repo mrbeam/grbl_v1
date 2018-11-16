@@ -37,7 +37,6 @@
 
 
 static char line[LINE_BUFFER_SIZE]; // Line to be executed. Zero-terminated.
-static char previousLine[LINE_BUFFER_SIZE*2]; // To hold the previous line and later both
 
 // Directs and executes one line of formatted input from protocol_process. While mostly
 // incoming streaming g-code blocks, this also directs and executes Grbl internal commands,
@@ -117,7 +116,7 @@ void protocol_main_loop()
 
         // If an error occurred in the previous line, show it
         if (writeError) {
-          report_corrupted_line(strcat(previousLine, line));
+          report_corrupted_line(line);
           writeError = false;
         }
       } else {
@@ -159,8 +158,9 @@ void protocol_main_loop()
             // G24 avoidance
             if (containsG){
               // If there is already a G in the line, simulate end of line and beginning of next
-              strcpy(previousLine, line); // Save current line so it can be shown
               line[char_counter] = 0; // Set string termination character.
+              report_feedback_message(MESSAGE_G24_AVOIDED);
+              report_corrupted_line(line);
               protocol_execute_line(line); // Line is complete. Execute it!
               iscomment = false;
               writeError = true;

@@ -65,6 +65,7 @@
 #define MESSAGE_ALARM_UNLOCK 3
 #define MESSAGE_ENABLED 4
 #define MESSAGE_DISABLED 5
+#define MESSAGE_G24_AVOIDED 6
 
 // Prints system status messages.
 void report_status_message(uint8_t status_code);
