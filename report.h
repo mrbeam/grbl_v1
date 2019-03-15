@@ -65,13 +65,15 @@
 #define MESSAGE_ALARM_UNLOCK 3
 #define MESSAGE_ENABLED 4
 #define MESSAGE_DISABLED 5
-#define MESSAGE_G24_AVOIDED 6
 
 // Prints system status messages.
 void report_status_message(uint8_t status_code);
 
 // Prints system alarm messages.
 void report_alarm_message(int8_t alarm_code);
+
+// Reports checksum errors/alarms. added by MrBeam
+void report_alarm_mrb_checksum(char *line);
 
 // Prints miscellaneous feedback messages.
 void report_feedback_message(uint8_t message_code);
@@ -102,8 +104,5 @@ void report_startup_line(uint8_t n, char *line);
 
 // Prints build info and user info
 void report_build_info(char *line);
-
-// Prints the GCODE line on error
-void report_corrupted_line(char *line);
 
 #endif

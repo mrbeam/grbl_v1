@@ -36,6 +36,7 @@
 #include "spindle_control.h"
 #include "stepper.h"
 #include "serial.h"
+#include "protocol.h"
 
 
 // Handles the primary confirmation protocol response for streaming interfaces and human-feedback.
@@ -46,13 +47,19 @@
 // responses.
 // NOTE: In silent mode, all error codes are greater than zero.
 // TODO: Install silent mode to return only numeric values, primarily for GUIs.
-void report_status_message(uint8_t status_code) 
+void report_status_message(uint8_t status_code)
 {
   if (status_code == 0) { // STATUS_OK
     uint8_t rx_free = RX_BUFFER_SIZE - serial_get_rx_buffer_count();
-    printPgmString(PSTR("ok:"));
-	  print_uint8_base10(rx_free);
-	  printPgmString(PSTR("\r\n"));
+    printPgmString(PSTR("ok"));
+    if (mrb_checksum_enabled) {
+        printPgmString(PSTR(" *"));
+	    print_uint8_base10(mrb_checksum);
+    } else {
+        printPgmString(PSTR(":"));
+        print_uint8_base10(rx_free);
+    }
+	printPgmString(PSTR("\r\n"));
   } else {
     printPgmString(PSTR("error: "));
     switch(status_code) {          
@@ -91,6 +98,10 @@ void report_status_message(uint8_t status_code)
         printPgmString(PSTR("Invalid gcode ID:"));
         print_uint8_base10(status_code); // Print error code for user reference
     }
+    if (mrb_checksum_enabled) {
+        printPgmString(PSTR(" *"));
+	    print_uint8_base10(mrb_checksum);
+    }
     printPgmString(PSTR("\r\n"));
   }
 }
@@ -113,6 +124,13 @@ void report_alarm_message(int8_t alarm_code)
   delay_ms(500); // Force delay to ensure message clears serial write buffer.
 }
 
+void report_alarm_mrb_checksum(char *line)
+{
+    printString("ALARM: MRB_CHECKSUM_ERROR in ");
+    printString(line);
+    printString("\r\n");
+}
+
 // Prints feedback messages. This serves as a centralized method to provide additional
 // user feedback for things that are not of the status/alarm message protocol. These are
 // messages such as setup warnings, switch toggling, and how to exit alarms.
@@ -133,17 +151,8 @@ void report_feedback_message(uint8_t message_code)
     printPgmString(PSTR("Enabled")); break;
     case MESSAGE_DISABLED:
     printPgmString(PSTR("Disabled")); break;
-    case MESSAGE_G24_AVOIDED:
-    printPgmString(PSTR("G24_AVOIDED")); break;
   }
   printPgmString(PSTR("]\r\n"));
-}
-
-void report_corrupted_line(char *line)
-{
-    printString("Corrupted line: ");
-    printString(line);
-    printString("\n");
 }
 
 // Welcome message

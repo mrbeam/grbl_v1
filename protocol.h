@@ -59,4 +59,14 @@ void protocol_auto_cycle_start();
 // Block until all buffered steps are executed
 void protocol_buffer_synchronize();
 
+//// mr beam checksum ////
+//
+// Once enabled, all commands must include a valid checksum.
+// Checksums in gcode are a mrbeam specific, non-standard addition.
+// Checksum verification is enabled by the first gcode command including a checksum.
+// To disable checksum verification grbl needs to be reset.
+uint8_t mrb_checksum_enabled;
+// Verified checksum of current command.
+uint8_t mrb_checksum;
+
 #endif

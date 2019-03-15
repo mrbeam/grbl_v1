@@ -41,7 +41,7 @@ static char line[LINE_BUFFER_SIZE]; // Line to be executed. Zero-terminated.
 // Directs and executes one line of formatted input from protocol_process. While mostly
 // incoming streaming g-code blocks, this also directs and executes Grbl internal commands,
 // such as settings, initiating the homing cycle, and toggling switch states.
-static void protocol_execute_line(char *line) 
+static void protocol_execute_line(char *line)
 {      
   protocol_execute_runtime(); // Runtime command check point.
   if (sys.abort) { return; } // Bail to calling function upon system abort  
@@ -90,10 +90,12 @@ void protocol_main_loop()
   // Primary loop! Upon a system abort, this exits back to main() to reset the system. 
   // ---------------------------------------------------------------------------------  
   
+  mrb_checksum = 0;
   uint8_t iscomment = false;
-  uint8_t containsG = false;
-  uint8_t writeError = false;
   uint8_t char_counter = 0;
+  uint8_t mrb_checksum_gcode = 0;
+  uint8_t mrb_checksum_enabled = false;
+  uint8_t mrb_checksum_parsing = false;
   uint8_t c;
   for (;;) {
 
@@ -109,17 +111,37 @@ void protocol_main_loop()
     while((c = serial_read()) != SERIAL_NO_DATA) {
       if ((c == '\n') || (c == '\r')) { // End of line reached
         line[char_counter] = 0; // Set string termination character.
-        protocol_execute_line(line); // Line is complete. Execute it!
-        iscomment = false;
-        containsG = false;
-        char_counter = 0;
-
-        // If an error occurred in the previous line, show it
-        if (writeError) {
-          report_corrupted_line(line);
-          writeError = false;
+        if (mrb_checksum_enabled && (mrb_checksum != mrb_checksum_gcode)) {
+            sys.state = STATE_ALARM;
+            report_alarm_mrb_checksum(line);
+        } else {
+            protocol_execute_line(line); // Line is complete. Execute it!
         }
+        iscomment = false;
+//        containsG = false;
+        char_counter = 0;
+        mrb_checksum = 0;
+        mrb_checksum_gcode = 0;
+        mrb_checksum_parsing = false;
       } else {
+        // we have read a '*' and therefor we are in checksum parsing mode
+        if (mrb_checksum_parsing) {
+            if ((c >= '0') && (c <= '9')) {
+                mrb_checksum_gcode *= 10;
+                mrb_checksum_gcode += (c-'0');
+                break; // no further processing of this char
+            } else {
+                // any char other than a number ends the checksum parsing mode
+                mrb_checksum_parsing = false;
+                // continue processing this char cause it's not part of the checksum
+            }
+        }
+
+        // count towards checksum if it's not a white space
+        if (c != ' ') {
+            mrb_checksum += c;
+        }
+
         if (iscomment) {
           // Throw away all comment characters
           if (c == ')') {
@@ -127,9 +149,9 @@ void protocol_main_loop()
             iscomment = false;
           }
         } else {
-          if (c <= ' ') { 
-            // Throw away whitepace and control characters  
-          } else if (c == '/') { 
+          if (c <= ' ') {
+            // Throw away whitespace and control characters
+          } else if (c == '/') {
             // Block delete NOT SUPPORTED. Ignore character.
             // NOTE: If supported, would simply need to check the system if block delete is enabled.
           } else if (c == '(') {
@@ -145,31 +167,26 @@ void protocol_main_loop()
           // } else if (c == '%') {
             // Program start-end percent sign NOT SUPPORTED.
             // NOTE: This maybe installed to tell Grbl when a program is running vs manual input,
-            // where, during a program, the system auto-cycle start will continue to execute 
+            // where, during a program, the system auto-cycle start will continue to execute
             // everything until the next '%' sign. This will help fix resuming issues with certain
             // functions that empty the planner buffer to execute its task on-time.
 
+          } else if (c == '*') {
+            // Enables mrb_checksum_enabled and switches to checksum parsing mode.
+            //
+            // mrb_checksum_enabled:  If one command includes a '*',
+            //                        checksum verification is globally enabled and this and all
+            //                        further commands require a valid checksum until next grbl reset.
+            // checksum parsing mode: All digits from here on are parsed as mrb_checksum_gcode.
+            mrb_checksum -= c;
+            mrb_checksum_enabled = true;
+            mrb_checksum_gcode = 0;
+            mrb_checksum_parsing = true;
           } else if (char_counter >= (LINE_BUFFER_SIZE-1)) {
             // Detect line buffer overflow. Report error and reset line buffer.
             report_status_message(STATUS_OVERFLOW);
             iscomment = false;
             char_counter = 0;
-          } else if (c == 'G' || c == 'g') {
-            // G24 avoidance
-            if (containsG){
-              // If there is already a G in the line, simulate end of line and beginning of next
-              line[char_counter] = 0; // Set string termination character.
-              report_feedback_message(MESSAGE_G24_AVOIDED);
-              report_corrupted_line(line);
-              protocol_execute_line(line); // Line is complete. Execute it!
-              iscomment = false;
-              writeError = true;
-              char_counter = 0; //Start new line
-            } else {
-              containsG = true;
-            }
-            line[char_counter++] = 'G'; //Add 'G' to line
-
 
           } else if (c >= 'a' && c <= 'z') { // Upcase lowercase
             line[char_counter++] = c-'a'+'A';
