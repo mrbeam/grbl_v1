@@ -90,11 +90,11 @@ void protocol_main_loop()
   // Primary loop! Upon a system abort, this exits back to main() to reset the system. 
   // ---------------------------------------------------------------------------------  
   
+  mrb_checksum_enabled = false;
   mrb_checksum = 0;
   uint8_t iscomment = false;
   uint8_t char_counter = 0;
   uint8_t mrb_checksum_gcode = 0;
-  uint8_t mrb_checksum_enabled = false;
   uint8_t mrb_checksum_parsing = false;
   uint8_t c;
   for (;;) {
@@ -112,6 +112,12 @@ void protocol_main_loop()
       if ((c == '\n') || (c == '\r')) { // End of line reached
         line[char_counter] = 0; // Set string termination character.
         if (mrb_checksum_enabled && (mrb_checksum != mrb_checksum_gcode)) {
+            // Add a command to turn off the laser.
+            // If the planning buffer runs empty, we end with laser off.
+            // Raspi has to re-send the laser intensity.
+            // by using gc_execute_line() instead of report_alarm_mrb_checksum()
+            // we're omitting the ok message to the raspi.
+            gc_execute_line("S0");
             sys.state = STATE_ALARM;
             report_alarm_mrb_checksum(line);
         } else {
